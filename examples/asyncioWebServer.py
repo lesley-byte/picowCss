@@ -4,40 +4,22 @@ import time
 from machine import Pin
 import uasyncio as asyncio
 import secrets
+import index
 led = Pin("LED", Pin.OUT, value=0) #Pin(15, Pin.OUT)
 onboard = Pin("LED", Pin.OUT, value=0)
 #print(secrets.ssid)
 ssid = secrets.ssid
 password = secrets.psswd
-
-html = """<!DOCTYPE html>
-<html lang="en">
-    <head> 
-        <meta charset="UTF-8"/>
-        <link rel="stylesheet" href="/stylefile.css">
-        <title>Pico W</title>
-    </head>
-    <body>
-        <main>
-        <h1>Pico</h1>
-        <p>%s</p>
-        <a href="/light/on">Light On</a> </br>
-        <a href="/light/off">Light Off</a> </br>
-        </main>
-        <script type="text/javascript" src="script.js"></script>
-    </body>
-</html>
-"""
+html = index.html
 webdocs = "/webroot/"
-
 wlan = network.WLAN(network.STA_IF)
 
 def connect_to_network():
     wlan.active(True)
     wlan.config(pm = 0xa11140)
-    wlan.connect(ssid, password)
-    
+    wlan.connect(ssid, password)  
     max_wait = 10
+    
     while max_wait > 0:
         if wlan.status() < 0 or wlan.status() >=3:
             break
