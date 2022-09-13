@@ -6,7 +6,7 @@ import uasyncio as asyncio
 import secrets
 led = Pin("LED", Pin.OUT, value=0) #Pin(15, Pin.OUT)
 onboard = Pin("LED", Pin.OUT, value=0)
-print(secrets.ssid)
+#print(secrets.ssid)
 ssid = secrets.ssid
 password = secrets.psswd
 
@@ -21,7 +21,10 @@ html = """<!DOCTYPE html>
         <main>
         <h1>Pico</h1>
         <p>%s</p>
-    </main>
+        <a href="/light/on">Light On</a> </br>
+        <a href="/light/off">Light Off</a> </br>
+        </main>
+        <script type="text/javascript" src="script.js"></script>
     </body>
 </html>
 """
@@ -39,15 +42,15 @@ def connect_to_network():
         if wlan.status() < 0 or wlan.status() >=3:
             break
         max_wait -=1
-        print('waiting for connection...')
+        print('Waiting for connection...')
         time.sleep(1)
         
     if wlan.status() != 3:
-        raise RuntimeError('network connection failed')
+        raise RuntimeError('Network connection failed')
     else:
-        print('connected')
+        print('Connected')
         status = wlan.ifconfig()
-        print('ip = ' + status[0])
+        print('IP = ' + status[0])
         
 async def serve_client(reader, writer):
     print("Client connected")
@@ -61,6 +64,7 @@ async def serve_client(reader, writer):
     led_on = request.find('/light/on')
     led_off = request.find('/light/off')
     css = request.find('.css')
+    js = request.find('.js')
     print('led on = ' + str(led_on))
     print('led off = ' + str(led_off))
     
@@ -85,6 +89,15 @@ async def serve_client(reader, writer):
         f.close()
         writer.write('HTTP/1.0 200 OK\r\nContent-type: text/css\r\n\n')
         writer.write(response)
+    elif js > 0:
+        print("js")
+        requestedfile = request[6:css+4]
+        f = open(webdocs + 'script.js')
+        response = f.read()
+        f.close()
+        writer.write('HTTP/1.0 200 OK\r\nContent-type: text/js\r\n\n')
+        writer.write(response)
+        
     else:
         writer.write('HTTP/1.0 200 OK\r\nContent-type: text/html\r\n\r\n')
         writer.write(response)
