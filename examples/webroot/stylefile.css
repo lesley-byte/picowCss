@@ -1,4 +1,25 @@
 body {
-background-color:black;
-color:coral;
+font-family: Helvetica, sans-serif;
+background-color:gray;
+color:white;
+}
+a:link, a:visited {
+  font-family: Garamond, serif;
+  font-weight: bold;
+  background-color: #f44336;
+  opacity: 0.5;
+  color: white;
+  margin: 20px;
+  padding: 14px 25px;
+  border: 2px solid black;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+a:hover, a:active {
+  font-family: Garamond, serif;
+  font-weight: bold;
+  background-color: red;
+  opacity: 1;
 }
