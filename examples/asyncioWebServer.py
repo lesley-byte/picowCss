@@ -1,3 +1,5 @@
+# Thanks to SpiderMaf on YouTube.  This code is adapted from his code.
+
 import network
 import socket
 import time
